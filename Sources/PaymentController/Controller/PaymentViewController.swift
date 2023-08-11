@@ -47,7 +47,7 @@ class PaymentViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // do someting...
-        self.title = "URWAY"
+        self.title = "Payments"
         self.navigationController?.setNavigationBarHidden(false, animated: true)
         self.view.backgroundColor = .white
         
@@ -56,38 +56,44 @@ class PaymentViewController: UIViewController {
 
         
         webView = WKWebView()
-        webView.configuration.preferences.javaScriptEnabled = true
-
-        webView.navigationDelegate = self
-        activityIndicator.frame = CGRect(x: view.frame.width / 2 - 40,
-                                         y: view.frame.height / 2,
-                                         width: 40,
-                                         height: 40)
-
-        activityIndicator.center = view.center
-        activityIndicator.color = .red
-        webView.frame = view.frame
+//        webView.configuration.preferences.javaScriptEnabled = false
+//
+//        webView.navigationDelegate = self
+//        activityIndicator.frame = CGRect(x: view.frame.width / 2 - 40,
+//                                         y: view.frame.height / 2,
+//                                         width: 40,
+//                                         height: 40)
+//
+//        activityIndicator.center = view.center
+//        activityIndicator.color = .red
+//        webView.frame = view.frame
+        
+        
+        let config = WKWebViewConfiguration()
+              webView = WKWebView(frame: view.bounds, configuration: config)
+              webView.navigationDelegate = self
+        
         self.view.addSubview(webView)
      //   self.view.addSubview(activityIndicator)
 
 
-        activityIndicator.layer.zPosition = 1
-        activityIndicator.startAnimating()
+//        activityIndicator.layer.zPosition = 1
+    //activityIndicator.startAnimating()
         
-        lblActivityIndicator = UILabel(frame: CGRect(x: view.frame.width / 2 - 40,
-        y: view.frame.height / 2,
-        width: 200,
-        height: 150))
-        lblActivityIndicator.center = view.center
-        lblActivityIndicator.textAlignment = .center
-        lblActivityIndicator.textColor = .black
-       // lblActivityIndicator.layer.zPosition = 1
-        lblActivityIndicator.numberOfLines = 2
-        lblActivityIndicator.text = "Please wait \n Transaction is in process ..."
-        self.view.addSubview(lblActivityIndicator)
+//        lblActivityIndicator = UILabel(frame: CGRect(x: view.frame.width / 2 - 40,
+//        y: view.frame.height / 2,
+//        width: 200,
+//        height: 150))
+//        lblActivityIndicator.center = view.center
+//        lblActivityIndicator.textAlignment = .center
+//        lblActivityIndicator.textColor = .black
+//       // lblActivityIndicator.layer.zPosition = 1
+//        lblActivityIndicator.numberOfLines = 2
+//       // lblActivityIndicator.text = "Please wait \n Transaction is in process ..."
+//        self.view.addSubview(lblActivityIndicator)
+//
         
-        
-        webView.configuration.userContentController.addUserScript(self.getZoomDisableScript())
+        //webView.configuration.userContentController.addUserScript(self.getZoomDisableScript())
 
        
        
@@ -140,7 +146,7 @@ extension PaymentViewController: IPaymentViewController {
                            return
                 
             }else {
-                print("not sucess")
+                
             
            
             
@@ -167,13 +173,16 @@ extension PaymentViewController: IPaymentViewController {
                 initProto?.didPaymentResult(result: .failure(message), error: nil , model: model)
                 return
             }else{
-                DispatchQueue.main.async {
-                    self.lblActivityIndicator.removeFromSuperview()
-                    guard  let url = URL(string: fullURL) else {return}
-                    self.webView.load(URLRequest(url: url))
-                }
+
+                
+                    DispatchQueue.main.async {
+                        self.lblActivityIndicator.removeFromSuperview()
+                        guard  let url = URL(string: fullURL) else {return}
+                        self.webView.load(URLRequest(url: url))
+                        
+                    }
             }
-               
+
                
         }
            
@@ -267,30 +276,35 @@ extension PaymentViewController {
                 self.lblActivityIndicator.removeFromSuperview()
             }
             
-            if newURL.contains("Successful") {
+            if (results.caseInsensitiveCompare("Successful") == .orderedSame) || (results.caseInsensitiveCompare("Success") == .orderedSame)
+            {
                 
                 self.activityIndicator.stopAnimating()
-                 self.lblActivityIndicator.removeFromSuperview()
+                self.lblActivityIndicator.removeFromSuperview()
                 let message = UMResponceMessage.responseDict[responsecode] ?? ""
 
-                let model = PaymentResultData(paymentID: payid, transID: tranid, responseCode: responsecode, amount: amount, result: message ,tokenID: cardToken,cardBrand: cardBrand,maskedPan: maskedPan,responseMsg: message,metaData: metaData,paymentType: paymentType)
+                let model = PaymentResultData(paymentID: payid, transID: tranid, responseCode: responsecode, amount: amount, result: results ,tokenID: cardToken,cardBrand: cardBrand,maskedPan: maskedPan,responseMsg: message,metaData: metaData,paymentType: paymentType)
                 
                 initProto?.didPaymentResult(result: .sucess , error: nil , model: model)
             }
-            else if newURL.contains("UnSuccessful")
+            //(results.caseInsensitiveCompare("Failure") == .orderedSame)
+            else if (results.caseInsensitiveCompare("UnSuccessful") == .orderedSame)
             {
                 self.activityIndicator.stopAnimating()
                  self.lblActivityIndicator.removeFromSuperview()
                 let message = UMResponceMessage.responseDict[responsecode] ?? ""
-
-                
                 let model = PaymentResultData(paymentID: payid, transID: tranid, responseCode: responsecode, amount: amount, result: "Failure",tokenID: cardToken,cardBrand: cardBrand,maskedPan: maskedPan,responseMsg: message,metaData: metaData,paymentType: paymentType)
                 
                 initProto?.didPaymentResult(result: .failure(message), error: nil , model: model)
             }
-            else if newURL.contains("Failure")
+            
+//            if(a.caseInsensitiveCompare(b) == .orderedSame){
+//                print("Et voila")
+//            }
+            else if (results.caseInsensitiveCompare("Failure") == .orderedSame)
             {
-                
+                print("In Failure")
+
                 self.activityIndicator.stopAnimating()
                  self.lblActivityIndicator.removeFromSuperview()
                 
@@ -302,7 +316,22 @@ extension PaymentViewController {
                 
                 initProto?.didPaymentResult(result: .failure(message), error: nil , model: model)
             }
-            
+//            else if newURL.contains("FAILURE")
+//            {
+//                print("In Failure")
+//
+//                self.activityIndicator.stopAnimating()
+//                 self.lblActivityIndicator.removeFromSuperview()
+//
+//                let message = UMResponceMessage.responseDict[responsecode] ?? ""
+//
+//
+//                let model = PaymentResultData(paymentID: payid, transID: tranid, responseCode: responsecode, amount: amount, result: "Failure",tokenID: cardToken,
+//                                              cardBrand: cardBrand,maskedPan: maskedPan,responseMsg: message,metaData: metaData,paymentType: paymentType)
+//
+//                initProto?.didPaymentResult(result: .failure(message), error: nil , model: model)
+//            }
+//
             
         } else {
             

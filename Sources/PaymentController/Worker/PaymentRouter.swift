@@ -2,7 +2,7 @@
 
 import UIKit
 
-protocol IPaymentRouter: class {
+protocol IPaymentRouter: AnyObject {
 	// do someting...
 }
 

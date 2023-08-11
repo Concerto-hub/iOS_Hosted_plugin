@@ -28,12 +28,12 @@ func getController(_ storyBoardName: String, _ identifier: String) -> UIViewCont
 
 internal class Common: NSObject {
 
-
-    internal struct Globle {
-            static var terminalId = "iOSAndTerm" // termilan provided by URWAY
-            static var password = "password" // password provided by URWAY
-            static var merchantKey = "07dc98635e206f259d9d19a12a02750c8c3a996354bc959508e45449c1bcd02f" 
-           static var url = "https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest"
+    internal struct Globle
+    {
+            static var terminalId = "TER6856791" // termilan provided by URWAY
+            static var password = "TER23082202410687570250" // password provided by URWAY
+            static var merchantKey = "654f277e1a955b867406adc2405b56a38dba0fcb173f3b994653d582c533edc5"
+            static var url = "http://10.10.11.208:8076/CORE_2.2.2/transaction/jsonProcess/JSONrequest"
             static var merchantIdentifier="merchant.testios.com"
     }
 }

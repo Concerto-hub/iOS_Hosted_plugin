@@ -43,6 +43,7 @@ internal struct UMResponceMessage {
         "226":"Negative Country, Customer is not allowed to perform Transaction",
         "227":"Card type not supported by institution",
         "228":"Multiple captures not allowed",
+        "244":"Token not found in vault",
         "301":"Transaction is not allowed for given Terminal",
         "302":"ransaction is not allowed for given Merchant",
         "303":"Transaction is not allowed for given Institution",

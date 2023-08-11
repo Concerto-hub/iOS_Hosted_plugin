@@ -4,6 +4,7 @@
 
 import UIKit
 import CommonCrypto
+    
 
 
 protocol IPaymentInteractor: class {
@@ -33,6 +34,7 @@ class PaymentInteractor: IPaymentInteractor {
 //        {
         var requestHash:String = ""
         var data: String = ""
+        var instrumentType = ""
             print("PaymentInterceptor" )
             print(model.cardOperation)
         let terminalId : String = Common.Globle.terminalId
@@ -66,6 +68,12 @@ class PaymentInteractor: IPaymentInteractor {
         {
             tokenOperation = ""
         }
+        
+        if action == "12" && tokenOperation == "D"
+        {
+            print(" Performing Delete Operation ")
+            instrumentType = "CCI"
+        }
         data = "\(trackid)|\(terminalId)|\(password)|\(merchantKey)|\(amount)|\(currency)"
         requestHash = sha256(str: data)
         
@@ -76,7 +84,7 @@ class PaymentInteractor: IPaymentInteractor {
         //value for device
         //
         var deviceInfo:[String: Any] = [:]
-        
+        var deviceInfoJsonString:String = ""
         let ModelName = UIDevice.current.name
         let version = UIDevice.current.systemVersion
         let platfrom = UIDevice.current.model
@@ -85,21 +93,32 @@ class PaymentInteractor: IPaymentInteractor {
         print(version)       // 12.1
         print(platfrom)     // iPhone
         
+        let myPodVersion = MyPodVersion.version
+        print("My Pod Version: \(myPodVersion)")
+        
         
         deviceInfo = [
             "pluginName": "Native iOS",
-            "pluginVersion": "1.0",
-            "pluginPlatform": platfrom,
+            "pluginVersion": myPodVersion,
+            "clientPlatform": platfrom,
             "deviceModel": ModelName,
             "devicePlatform": platfrom,
             "deviceOSVersion": version
         ]
         
         print(deviceInfo)
-  
+        do {
+        let jsonData = try JSONSerialization.data(withJSONObject: deviceInfo, options: [])
+           let jsonString = String(data: jsonData, encoding: .utf8)!
+           print("Device INFO JSON ", jsonString )
+            deviceInfoJsonString = jsonString
+
+        } catch  {
+            print("error")
+        }
         let strIPAddress = Validator().getWiFiAddress()
         print("IPAddress :: \(strIPAddress)")
-        
+        print("CARD TOKEN  :: \(cardTocken)")
         let parameters = [
             "transid": "",
             "amount": amount,
@@ -128,7 +147,18 @@ class PaymentInteractor: IPaymentInteractor {
           
             "cardHolderName": holderName,
             "metaData": metaData,
-            "deviceInfo": deviceInfo
+            "instrumentType" : instrumentType,
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            "deviceInfo": deviceInfoJsonString
             ] as [String : Any]
         
         
@@ -197,33 +227,7 @@ class PaymentInteractor: IPaymentInteractor {
                         return
                     }
                     
-                       /*
-                    if tockenName == "D" , let payID = receivedTodo["payid"] as? String{
-                        
-                        fullURL = "https://payments-dev.urway-tech.com/URWAYPGService/3DRedirect.jsp?paymentid=\(payID)"
-                    } else {
-                        fullURL = self.newURL
-                    }*/
-                    
-//                    if tockenName == "D"{
-//                        let string = self.newURL
-//                        if string.contains("?") {
-//                            print("NEW RUNALI : \(string)")
-//
-//                        }
-//                        if let payID = receivedTodo["payid"] as? String{
-//                            print("the NEW URL : \(self.newURL)")
-//                            self.newURL = "\(self.newURL)?paymentid=\(payID)"
-//                            fullURL = "\(self.newURL)\(payID)"
-//                            print("the NEW URL1 : \(fullURL)")
-//                        }else{
-//                            fullURL = self.newURL
-//                            print("the NEW URL2 : \(fullURL)")
-//                        }
-//                        //fullURL = "https://payments-dev.urway-tech.com/URWAYPGService/3DRedirect.jsp?paymentid=\(payID)"
-//                    } else {
-                       fullURL = self.newURL
-//                    }
+                    fullURL = self.newURL
                     print("the NEW URL : \(self.newURL)")
                     print("the url is : \(fullURL)")
 

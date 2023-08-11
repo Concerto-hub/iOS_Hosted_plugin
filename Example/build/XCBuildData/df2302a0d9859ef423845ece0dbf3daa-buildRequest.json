@@ -1,0 +1,51 @@
+{
+  "_buildCommand2" : {
+    "command" : "prepareForIndexing",
+    "enableIndexBuildArena" : false,
+    "targets" : null
+  },
+  "buildCommand" : "build",
+  "configuredTargets" : [
+    {
+      "guid" : "bfdfe7dc352907fc980b868725387e98be588d1fdb6f4f594341a11b874ba033"
+    },
+    {
+      "guid" : "bfdfe7dc352907fc980b868725387e98a8e3933f520fb3be411ced11facde841"
+    },
+    {
+      "guid" : "bfdfe7dc352907fc980b868725387e9873a9066651dc26cfea8719713acd56b2"
+    }
+  ],
+  "containerPath" : "/Users/Amit/Documents/Runali_ios/VEGAAH_GCC/gcc_plugin_app/iOS_Hosted_plugin/Example/Pods/Pods.xcodeproj",
+  "continueBuildingAfterErrors" : true,
+  "enableIndexBuildArena" : false,
+  "hideShellScriptEnvironment" : false,
+  "parameters" : {
+    "action" : "build",
+    "arenaInfo" : {
+      "buildIntermediatesPath" : "",
+      "buildProductsPath" : "",
+      "derivedDataPath" : "/Users/Amit/Library/Developer/Xcode/DerivedData",
+      "indexDataStoreFolderPath" : "/Users/Amit/Library/Developer/Xcode/DerivedData/Pods-bqgdwrwsiynwrefknunozwqlbeoh/Index.noindex/DataStore",
+      "indexEnableDataStore" : true,
+      "indexPCHPath" : "/Users/Amit/Library/Developer/Xcode/DerivedData/Pods-bqgdwrwsiynwrefknunozwqlbeoh/Index.noindex/PrecompiledHeaders",
+      "pchPath" : ""
+    },
+    "configurationName" : "Release",
+    "overrides" : {
+      "synthesized" : {
+        "table" : {
+          "ENABLE_PREVIEWS" : "NO"
+        }
+      }
+    }
+  },
+  "qos" : "default",
+  "schemeCommand" : "launch",
+  "schemeCommand2" : "launch",
+  "showNonLoggedProgress" : true,
+  "useDryRun" : true,
+  "useImplicitDependencies" : false,
+  "useLegacyBuildLocations" : false,
+  "useParallelTargets" : false
+}

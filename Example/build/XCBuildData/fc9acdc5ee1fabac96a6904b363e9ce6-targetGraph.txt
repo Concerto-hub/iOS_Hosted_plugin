@@ -1,0 +1,6 @@
+Target dependency graph (3 targets)
+iOS_Hosted_plugin in Pods, no dependencies
+Pods-iOS_Hosted_plugin_Example in Pods, depends on:
+iOS_Hosted_plugin in Pods (explicit)
+Pods-iOS_Hosted_plugin_Tests in Pods, depends on:
+Pods-iOS_Hosted_plugin_Example in Pods (explicit)
